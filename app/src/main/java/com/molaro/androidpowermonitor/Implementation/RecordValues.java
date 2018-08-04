@@ -25,6 +25,8 @@ public class RecordValues extends IntentService {
     private double avg_mA;
     private double avg_mV;
 
+
+
     private String packageName;
     private boolean isApp;
 
@@ -143,7 +145,10 @@ public class RecordValues extends IntentService {
             tokens4 = line4.split(" ");
             double base_mA = Double.parseDouble(tokens1[1]);
             double base_mV = Double.parseDouble(tokens2[1]);
-            double base_remaining = Double.parseDouble(tokens4[1]);
+            double base_mAh = Double.parseDouble(tokens4[1]);
+
+            double base_remaining = Math.abs(base_mAh) / Math.abs(base_mA);
+            base_remaining = Math.round(base_remaining * 100.0) / 100.0;
 
             double mV_diff = base_mV - app_mV;
 
@@ -153,8 +158,7 @@ public class RecordValues extends IntentService {
             double mW_diff = app_mW - base_mW;
             double mW_percent = (mW_diff/app_mW) * 100;
 
-            //mV_diff = Math.round(mV_diff * 10000.0) / 10000.0;
-            mW_diff = Math.round(mW_diff * 10.0) / 10.0;
+            mW_percent = Math.round(mW_percent * 10.0) / 10.0;
             base_remaining = Math.round(base_remaining * 100.0) / 100.0;
 
 
